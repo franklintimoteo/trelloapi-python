@@ -1,22 +1,58 @@
 class Label:
-  def __init__(self, id, type, name, color):
+  def __init__(self, id, name, color):
     self.id = id
-    self.type = type
     self.name = name
     self.color = color
+    
+  @classmethod
+  def deserialize_json(cls, data):
+    labeldata = data['label']
+    label = {
+      'id': labeldata['id'],
+      'name': labeldata['name'],
+      'color': labeldata['color']
+    }
+    
+    return cls(**label)
 
 class Board:
   def __init__(self, id, name, shortLink):
     self.id = id
     self.name = name
     self.shortLink = shortLink
+  
+  @classmethod
+  def deserialize_json(cls, data):
+    boarddata = data['board']
+    board = {
+      'id': boarddata['id'],
+      'name': boarddata['name'],
+      'shortLink': boarddata['shortLink']
+    }
+    
+    return cls(**board)
+
 
 class Card:
-  def __init__(self, type, id, shortLink, text):
-    self.type = type
+  def __init__(self, id, name, idShort, shortLink):
     self.id = id
     self.shortLink = shortLink
-    self.text = text
+    self.name = name
+    self.idShort = idShort
+  
+  @classmethod
+  def deserialize_json(cls, data):
+    carddata = data['card']
+    
+    card = {
+      'id': carddata['id'],
+      'shortLink': carddata['shortLink'],
+      'name': carddata['name'],
+      'idShort': carddata['idShort']
+    }
+    
+    return cls(**card)
+    
 
 class MemberCreator:
   def __init__(self, id, trtype, username, text, activityBlocked, avatarHash, avatarUrl, fullName, initials,nonPublicAvailable,idMemberReferrer=None,  nonPublic={}):
@@ -33,11 +69,40 @@ class MemberCreator:
     self.initials = initials
     self.nonPublic = nonPublic # type: dict
     self.nonPublicAvailable = nonPublicAvailable
+  
+  @classmethod
+  def deserialize_json(cls, data):
+    mcdata = data['memberCreator']
+    memberCreator = {
+      'id': mcdata['id'],
+      'type' : mcdata['type'],
+      'username' : mcdata['username'],
+      'text' : mcdata['text'],
+      'activityBlocked' : mcdata['activityBlocked'],
+      'avatarHash' : mcdata['avatarHash'],
+      'fullName' : mcdata['fullName'],
+      'idMemberReferrer' : mcdata['idMemberReferrer'],
+      'initials' : mcdata['initials'],
+      'nonPublic' : mcdata['nonPublic'],
+      'nonPublicAvailable' : mcdata['nonPublicAvailable'] 
+    }
+    return cls(**memberCreator)
 
 class Display:
   def __init__(self, translationKey, entities):
     self.translationKey = translationKey
     self.entities = entities # type: dict
+  
+  @classmethod
+  def deserialize_json(cls, data):
+    ddata = data['display']
+    display = {
+      'translationKey': ddata['translationKey'],
+      'entities': ddata['entities']
+    }
+    return cls(**display)
+  
+    
 
 class Action:
   def __init__(self, id, idMemberCreator, data, type, date, appCreator, limits, display, memberCreator):
@@ -54,10 +119,36 @@ class Action:
   @classmethod
   def deserialize_json(cls, data):
     actdata = data['action']
+
+    action_data = actdata['data']
+    action_payload = {
+      'value': action_data.get('value', ''),
+      'text': action_data.get('text', ''),
+      'data': dict()
+    }
+    if action_data.get('card'):
+      action_payload['data']['card'] = Card.deserialize_json(action_data)
+    if action_data.get('board'):
+      action_payload['data']['board'] = Board.deserialize_json(action_data)
+    if action_data.get('label'):
+      action_payload['data']['label'] =  Label.deserialize_json(action_data)
+    
+    if action_data.get('old'):
+      action_payload['data']['old'] = action_data['old']
+    if action_data.get('checklist'):
+      action_payload['data']['checklist'] = action_data['checklist']
+    if action_data.get('checkItem'):
+      action_payload['data']['checkItem'] = action_data['checkItem']
+    if action_data.get('listBefore'):
+      action_payload['data']['listBefore'] = action_data['listBefore']
+    if action_data.get('listAfter'):
+      action_payload['data']['listAfter'] = action_data['listAfter']
+    
+
     action = {
       'id': actdata['id'],
       'idMemberCreator': actdata['idMemberCreator'],
-      'data': actdata['data'],
+      'data': action_payload,
       'type': actdata['type'],
       'date': actdata['date'],
       'appCreator': actdata['appCreator'],

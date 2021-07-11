@@ -11,11 +11,10 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['HEAD', 'POST', 'GET'])
 def webhook():
-  "Recebe dados via json pelo metodo post e repassa para api"
-  logger.debug(f'[{request.method}] Request recebida. ')
+  "Recebe dados via json pellso metodo post e repassa para api"
   if request.method in "POST":
-    trelobj= process_update_api(request.data, method=request.method)
-    print(trelobj)
+    trelobj = process_update_api(request.data, method=request.method)
+ 
   return Response(status=200)
 
 

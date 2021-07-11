@@ -20,7 +20,7 @@ def process_update_api(data, method):
   model = Model.deserialize_json(data)
   action = Action.deserialize_json(data)
 
-  logger.debug("%s Action:%s" %(model, action.type))
+  logger.debug("Loaded new update: %s Action:%s" %(model, action.type))
   
   return TrelloObject(model, action)  
 

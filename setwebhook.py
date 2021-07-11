@@ -1,6 +1,10 @@
 import requests
 import os
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 BASE_URL = "https://api.trello.com/1/webhooks/"
 
@@ -9,15 +13,15 @@ headers = {
 }
 
 data_webhook = {
-  'key': os.environ.get('TRELLO_APIKEY'),
+  'key': os.environ.get('TRELLO_API_KEY'),
   'token': os.environ.get('TRELLO_TOKEN'),
-  'callbackURL': "https://spiffyinsidiousoutcomes.franklindev.repl.co/webhook",
+  'callbackURL': "https://trelloapi.bardevnull.repl.co/webhook",
   'idModel': 'not defined',
 }
 
 data = {
-  'key': os.environ.get('TRELLO_APIKEY'),
-  'token': os.environ.get('TRELLO_TOKEN2'),
+  'key': os.environ.get('TRELLO_API_KEY'),
+  'token': os.environ.get('TRELLO_TOKEN'),
 }
 print(data)
 def get_model_id():
@@ -33,5 +37,8 @@ def set_webhook():
   
   return response
 
-
+if __name__ == "__main__":
+  response = set_webhook()
+  print(response.content)
+  
 
