@@ -123,26 +123,25 @@ class Action:
     action_data = actdata['data']
     action_payload = {
       'value': action_data.get('value', ''),
-      'text': action_data.get('text', ''),
-      'data': dict()
+      'text': action_data.get('text', '')
     }
     if action_data.get('card'):
-      action_payload['data']['card'] = Card.deserialize_json(action_data)
+      action_payload['card'] = Card.deserialize_json(action_data)
     if action_data.get('board'):
-      action_payload['data']['board'] = Board.deserialize_json(action_data)
+      action_payload['board'] = Board.deserialize_json(action_data)
     if action_data.get('label'):
-      action_payload['data']['label'] =  Label.deserialize_json(action_data)
+      action_payload['label'] =  Label.deserialize_json(action_data)
     
     if action_data.get('old'):
-      action_payload['data']['old'] = action_data['old']
+      action_payload['old'] = action_data['old']
     if action_data.get('checklist'):
-      action_payload['data']['checklist'] = action_data['checklist']
+      action_payload['checklist'] = action_data['checklist']
     if action_data.get('checkItem'):
-      action_payload['data']['checkItem'] = action_data['checkItem']
+      action_payload['checkItem'] = action_data['checkItem']
     if action_data.get('listBefore'):
-      action_payload['data']['listBefore'] = action_data['listBefore']
+      action_payload['listBefore'] = action_data['listBefore']
     if action_data.get('listAfter'):
-      action_payload['data']['listAfter'] = action_data['listAfter']
+      action_payload['listAfter'] = action_data['listAfter']
     
 
     action = {
